@@ -1,0 +1,350 @@
+/* Bootstrap Custom - Material Design Colors pour Foncier Glo */
+
+:root {
+    /* Primary Colors - Bleu profond */
+    --bs-primary: #00375e;
+    --bs-primary-rgb: 0, 55, 94;
+    --primary-fixed: #d1e4ff;
+    --primary-container: #1f4e79;
+    --on-primary: #ffffff;
+    --on-primary-fixed: #001d35;
+    --on-primary-container: #95bff1;
+    
+    /* Secondary Colors - Bleu ciel */
+    --bs-secondary: #0b61a1;
+    --bs-secondary-rgb: 11, 97, 161;
+    --secondary-fixed: #d1e4ff;
+    --secondary-container: #7cbaff;
+    --on-secondary: #ffffff;
+    --on-secondary-fixed: #001d36;
+    --on-secondary-container: #004a7d;
+    
+    /* Tertiary Colors - Violet/Indigo */
+    --bs-tertiary: #41009d;
+    --bs-tertiary-rgb: 65, 0, 157;
+    --tertiary-fixed: #e9ddff;
+    --tertiary-container: #5a20c3;
+    --on-tertiary: #ffffff;
+    --on-tertiary-fixed: #23005c;
+    --on-tertiary-container: #c7b0ff;
+    
+    /* Error/Danger Colors */
+    --bs-danger: #ba1a1a;
+    --bs-danger-rgb: 186, 26, 26;
+    --error-container: #ffdad6;
+    --on-error: #ffffff;
+    --on-error-container: #93000a;
+    
+    /* Success Colors */
+    --bs-success: #2ba84f;
+    --bs-success-rgb: 43, 168, 79;
+    
+    /* Warning Colors */
+    --bs-warning: #f5a623;
+    --bs-warning-rgb: 245, 166, 35;
+    
+    /* Info Colors */
+    --bs-info: #0b61a1;
+    --bs-info-rgb: 11, 97, 161;
+    
+    /* Surface Colors */
+    --bs-light: #f8f9ff;
+    --bs-dark: #0b1c30;
+    --surface: #f8f9ff;
+    --surface-container: #e5eeff;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #eff4ff;
+    --surface-container-high: #dce9ff;
+    --surface-container-highest: #d3e4fe;
+    --on-surface: #0b1c30;
+    --on-surface-variant: #42474f;
+    
+    /* Outline Colors */
+    --outline: #72777f;
+    --outline-variant: #c2c7d0;
+    
+    /* Additional Utilities */
+    --surface-dim: #cbdbf5;
+    --surface-bright: #f8f9ff;
+    --inverse-surface: #213145;
+    --inverse-primary: #a0cafc;
+    --inverse-on-surface: #eaf1ff;
+    --surface-tint: #35618d;
+    
+    /* Spacing custom (si besoin) */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+}
+
+/* Dark Mode Support (optionnel) */
+[data-bs-theme="dark"] {
+    --bs-primary: #a0cafc;
+    --bs-secondary: #9ecaff;
+    --bs-dark: #f8f9ff;
+    --bs-light: #0b1c30;
+    --surface: #0b1c30;
+    --on-surface: #f8f9ff;
+}
+
+/* Utility Classes pour Material Design */
+
+/* Containers */
+.bg-surface {
+    background-color: var(--surface);
+}
+
+.bg-surface-container {
+    background-color: var(--surface-container);
+}
+
+.bg-surface-container-lowest {
+    background-color: var(--surface-container-lowest);
+}
+
+.bg-surface-container-low {
+    background-color: var(--surface-container-low);
+}
+
+.bg-surface-container-high {
+    background-color: var(--surface-container-high);
+}
+
+.bg-primary-container {
+    background-color: var(--primary-container);
+}
+
+.bg-secondary-container {
+    background-color: var(--secondary-container);
+}
+
+.bg-tertiary-container {
+    background-color: var(--tertiary-container);
+}
+
+.bg-error-container {
+    background-color: var(--error-container);
+}
+
+/* Text Colors */
+.text-on-surface {
+    color: var(--on-surface);
+}
+
+.text-on-surface-variant {
+    color: var(--on-surface-variant);
+}
+
+.text-on-primary-container {
+    color: var(--on-primary-container);
+}
+
+.text-on-secondary-container {
+    color: var(--on-secondary-container);
+}
+
+.text-on-tertiary-container {
+    color: var(--on-tertiary-container);
+}
+
+.text-on-error-container {
+    color: var(--on-error-container);
+}
+
+.text-outline {
+    color: var(--outline);
+}
+
+.text-outline-variant {
+    color: var(--outline-variant);
+}
+
+/* Borders */
+.border-outline {
+    border-color: var(--outline);
+}
+
+.border-outline-variant {
+    border-color: var(--outline-variant);
+}
+
+/* Hover States */
+.hover\:bg-on-primary-fixed-variant:hover {
+    background-color: #184974;
+}
+
+/* Material Symbols Font */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.5rem;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    
+    /* Support for font-variation-settings */
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined[style*="'FILL' 1"] {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Grid Responsif */
+.grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Cards */
+.card-hover {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card-hover:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography Custom */
+.font-headline-lg {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    font-weight: 700;
+}
+
+.font-headline-md {
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+    font-weight: 700;
+}
+
+.font-title-lg {
+    font-size: 1.375rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+}
+
+.font-title-md {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+}
+
+.font-body-lg {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+}
+
+.font-body-md {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+}
+
+.font-label-lg {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+}
+
+.font-label-md {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 600;
+}
+
+/* Animations */
+.transition-colors {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.transition-all {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Active/Scale */
+.active\:scale-95:active {
+    transform: scale(0.95);
+}
+
+/* Spacing */
+.gap-md {
+    gap: var(--spacing-md);
+}
+
+.gap-lg {
+    gap: var(--spacing-lg);
+}
+
+.gap-sm {
+    gap: var(--spacing-sm);
+}
+
+/* Sidebar Layout */
+.sidebar-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 18rem; /* 288px / w-72 */
+    flex-shrink: 0;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 18rem;
+}
+
+.top-app-bar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+}
+
+/* Tables */
+.table-hover tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Badges */
+.badge-secondary-container {
+    background-color: var(--secondary-container);
+    color: var(--on-secondary-container);
+}
+
+/* Pills & Buttons */
+.btn-rounded-pill {
+    border-radius: 9999px;
+}
+
+/* Fixed Navigation */
+.navbar-fixed-left {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 18rem;
+    z-index: 50;
+    overflow-y: auto;
+}
+
+.content-with-sidebar {
+    margin-left: 18rem;
+}
+

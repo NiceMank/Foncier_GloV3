@@ -1,0 +1,263 @@
+Voici la structure complète 👇
+
+---
+
+# 📁 STRUCTURE ACTUELLE
+
+```
+foncier_glo/
+│
+├── 📄 index.php
+├── 📄 login.php
+├── 📄 logout.php
+├── 📄 dashboard.php
+│
+├── 📁 config/
+│   ├── 📄 database.php
+│   └── 📄 session.php
+│
+├── 📁 includes/
+│   ├── 📄 header.php
+│   ├── 📄 navbar.php
+│   └── 📄 footer.php
+│
+├── 📁 assets/
+│   ├── 📁 css/
+│   │   ├── 📄 style.css
+│   │   └── 📄 dashboard.css
+│   ├── 📁 js/
+│   │   └── 📄 script.js
+│   └── 📁 img/
+│
+└── 📁 pages/
+    ├── 📁 parcelles/
+    │   ├── 📄 index.php
+    │   ├── 📄 create.php
+    │   ├── 📄 show.php
+    │   └── 📄 edit.php
+    ├── 📁 proprietaires/
+    │   ├── 📄 index.php
+    │   ├── 📄 create.php
+    │   ├── 📄 show.php
+    │   └── 📄 edit.php
+    ├── 📁 alertes/
+    │   ├── 📄 index.php
+    │   └── 📄 show.php
+    └── 📁 litiges/
+        ├── 📄 index.php
+        ├── 📄 create.php
+        └── 📄 show.php
+```
+
+---
+
+# 📁 NOUVELLE STRUCTURE AVEC FONCTIONNALITÉS AJOUTÉES
+
+```
+foncier_glo/
+│
+├── 📄 index.php
+├── 📄 login.php           ← Connexion (Admin/Agent/Chef/Consultant)
+├── 📄 logout.php
+│
+├── 📁 config/
+│   ├── 📄 database.php
+│   └── 📄 session.php     ← Gestion des 4 rôles
+│
+├── 📁 includes/
+│   ├── 📄 header.php
+│   ├── 📄 navbar_admin.php     ← 🆕 Menu Admin/Agent/Chef
+│   ├── 📄 navbar_consultant.php ← 🆕 Menu Consultant
+│   └── 📄 footer.php
+│
+├── 📁 assets/
+│   ├── 📁 css/
+│   │   ├── 📄 style.css
+│   │   ├── 📄 dashboard.css
+│   │   └── 📄 consultant.css  ← 🆕 Style interface consultant
+│   ├── 📁 js/
+│   │   └── 📄 script.js
+│   ├── 📁 img/
+│   └── 📁 uploads/
+│       └── 📁 transferts/     ← 🆕 Documents de vente uploadés
+│
+├── 📁 admin/                  ← 🆕 Espace Admin/Agent/Chef
+│   ├── 📄 dashboard.php       ← 🆕 Dashboard selon rôle
+│   │
+│   ├── 📁 parcelles/
+│   │   ├── 📄 index.php
+│   │   ├── 📄 create.php
+│   │   ├── 📄 show.php
+│   │   └── 📄 edit.php
+│   │
+│   ├── 📁 proprietaires/
+│   │   ├── 📄 index.php
+│   │   ├── 📄 create.php      ← 🆕 Génère identifiants consultant
+│   │   ├── 📄 show.php
+│   │   └── 📄 edit.php
+│   │
+│   ├── 📁 alertes/
+│   │   ├── 📄 index.php
+│   │   └── 📄 show.php
+│   │
+│   ├── 📁 litiges/
+│   │   ├── 📄 index.php
+│   │   ├── 📄 create.php
+│   │   └── 📄 show.php
+│   │
+│   ├── 📁 transferts/         ← 🆕 Gestion transferts propriété
+│   │   ├── 📄 index.php       ← 🆕 Liste demandes de transfert
+│   │   ├── 📄 show.php        ← 🆕 Détails + validation
+│   │   └── 📄 valider.php     ← 🆕 Validation transfert
+│   │
+│   └── 📁 users/              ← 🆕 Gestion agents (Admin only)
+│       ├── 📄 index.php       ← 🆕 Liste agents
+│       ├── 📄 create.php      ← 🆕 Créer agent/chef
+│       └── 📄 edit.php        ← 🆕 Modifier agent
+│
+└── 📁 consultant/             ← 🆕 Espace Consultant (Propriétaire)
+    ├── 📄 dashboard.php       ← 🆕 Mes parcelles
+    ├── 📁 parcelles/
+    │   ├── 📄 index.php       ← 🆕 Mes parcelles
+    │   └── 📄 show.php        ← 🆕 Détails ma parcelle
+    └── 📁 transferts/
+        ├── 📄 create.php      ← 🆕 Demande de vente
+        ├── 📄 index.php       ← 🆕 Mes demandes en cours
+        └── 📄 show.php        ← 🆕 Statut de ma demande
+```
+
+---
+
+# 🗄️ NOUVELLES TABLES À AJOUTER
+
+```sql
+-- Table des transferts de propriété
+CREATE TABLE transferts (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    reference VARCHAR(100) NOT NULL UNIQUE,
+
+    -- Parcelle concernée
+    parcelle_id INT UNSIGNED NOT NULL,
+
+    -- Ancien propriétaire
+    ancien_proprietaire_id INT UNSIGNED NOT NULL,
+
+    -- Nouveau propriétaire
+    nouveau_nom VARCHAR(100) NOT NULL,
+    nouveau_prenom VARCHAR(100) NOT NULL,
+    nouveau_npi VARCHAR(50) NOT NULL,
+    nouveau_telephone VARCHAR(20) NOT NULL,
+    nouveau_email VARCHAR(150) NULL,
+    nouveau_adresse TEXT NOT NULL,
+
+    -- Document de preuve
+    document_preuve VARCHAR(255) NOT NULL,
+
+    -- Statut de la demande
+    statut ENUM(
+        'en_attente',
+        'en_verification',
+        'valide',
+        'rejete'
+    ) NOT NULL DEFAULT 'en_attente',
+
+    -- Commentaire du gestionnaire
+    commentaire TEXT NULL,
+
+    -- Agent qui a validé
+    agent_validateur_id INT UNSIGNED NULL,
+
+    -- Dates
+    date_validation TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+               ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (parcelle_id)
+        REFERENCES parcelles(id),
+    FOREIGN KEY (ancien_proprietaire_id)
+        REFERENCES proprietaires(id),
+    FOREIGN KEY (agent_validateur_id)
+        REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Ajouter colonne compte_consultant dans proprietaires
+ALTER TABLE proprietaires
+    ADD COLUMN email_connexion VARCHAR(150) UNIQUE NULL,
+    ADD COLUMN password_connexion VARCHAR(255) NULL,
+    ADD COLUMN compte_actif ENUM('oui','non') DEFAULT 'non';
+```
+
+---
+
+# 🔄 NOUVEAU FLUX DE FONCTIONNEMENT
+
+```
+ÉTAPE 1 — ENREGISTREMENT
+═════════════════════════
+Propriétaire vient à l'agence
+        ↓
+Agent enregistre :
+- Infos propriétaire
+- Infos parcelle
+- Génère email + mot de passe
+        ↓
+Propriétaire reçoit ses identifiants ✅
+
+ÉTAPE 2 — CONNEXION CONSULTANT
+════════════════════════════════
+Propriétaire va sur le site
+        ↓
+Se connecte avec email + mot de passe
+        ↓
+Accède à son dashboard consultant
+        ↓
+Voit ses parcelles
+
+ÉTAPE 3 — DEMANDE DE VENTE
+═══════════════════════════
+Consultant choisit parcelle à vendre
+        ↓
+Remplit infos nouveau propriétaire
+        ↓
+Upload document de preuve (PDF/PNG)
+        ↓
+Soumet la demande ✅
+        ↓
+Statut → "En attente"
+
+ÉTAPE 4 — VÉRIFICATION
+════════════════════════
+Agent/Chef reçoit notification
+        ↓
+Vérifie le document uploadé
+        ↓
+Appelle les parties concernées
+        ↓
+        ┌──────────┴──────────┐
+        ▼                     ▼
+   VALIDE ✅            REJETE ❌
+        ↓                     ↓
+Transfert effectué      Demande rejetée
+Parcelle → nouveau prop  Commentaire envoyé
+Ancien prop perd accès
+```
+
+---
+
+# 🎯 RÉSUMÉ DES NOUVELLES FONCTIONNALITÉS
+
+| Fonctionnalité | Fichier | Rôle |
+|---|---|---|
+| Dashboard selon rôle | `admin/dashboard.php` | Admin/Agent/Chef |
+| Créer compte consultant | `admin/proprietaires/create.php` | Admin/Agent |
+| Liste transferts | `admin/transferts/index.php` | Agent/Chef |
+| Valider transfert | `admin/transferts/valider.php` | Chef/Admin |
+| Dashboard consultant | `consultant/dashboard.php` | Consultant |
+| Mes parcelles | `consultant/parcelles/index.php` | Consultant |
+| Demande de vente | `consultant/transferts/create.php` | Consultant |
+| Gestion agents | `admin/users/index.php` | Admin only |
+
+---
+
+Tu veux qu'on commence par quel fichier ? 🚀

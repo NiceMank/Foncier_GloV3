@@ -1,0 +1,1 @@
+<?php header("Location: /foncier_gloV3/index.php"); exit(); ?>
