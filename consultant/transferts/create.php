@@ -33,7 +33,7 @@ $parcelle_id_pre = isset($_GET['parcelle_id']) ? (int)$_GET['parcelle_id'] : nul
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $parcelle_id   = (int)$_POST['parcelle_id'];
     $nouveau_nom   = nettoyer($_POST['nouveau_nom']);
-    $nouveau_prenom= nettoyer($_POST['nouveau_prenom']);
+    $nouveau_prenom = nettoyer($_POST['nouveau_prenom']);
     $nouveau_npi   = nettoyer($_POST['nouveau_npi']);
     $nouveau_tel   = nettoyer($_POST['nouveau_telephone']);
     $nouveau_email = nettoyer($_POST['nouveau_email']);
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file_ext   = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
         $extensions_autorisees = ['pdf', 'png', 'jpg', 'jpeg'];
-        
+
         // Validation A : Extension du fichier
         if (!in_array($file_ext, $extensions_autorisees)) {
             $erreurs[] = "Format de fichier refusé. Veuillez téléverser un document au format PDF, PNG ou JPG.";
@@ -102,13 +102,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             nouveau_nom, nouveau_prenom, nouveau_npi, 
                             nouveau_telephone, nouveau_email, document_preuve, statut
                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+
         $stmt_ins = $conn->prepare($sql_insert);
         $stmt_ins->bind_param(
             'siisssssss',
-            $reference, $parcelle_id, $user_id,
-            $nouveau_nom, $nouveau_prenom, $nouveau_npi,
-            $nouveau_tel, $nouveau_email, $nom_fichier_final, $statut_initial
+            $reference,
+            $parcelle_id,
+            $user_id,
+            $nouveau_nom,
+            $nouveau_prenom,
+            $nouveau_npi,
+            $nouveau_tel,
+            $nouveau_email,
+            $nom_fichier_final,
+            $statut_initial
         );
 
         if ($stmt_ins->execute()) {
@@ -124,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $conn->close();
 
-require_once '../../includes/header.php'; 
+require_once '../../includes/header.php';
 require_once '../../includes/navbar_consultant.php'; // Injecte la Topbar et la Sidebar citoyenne
 ?>
 
@@ -146,7 +153,7 @@ require_once '../../includes/navbar_consultant.php'; // Injecte la Topbar et la 
     <div class="bento-card bg-white border-0 shadow-sm p-4 mb-4 overflow-hidden">
         <div class="d-flex flex-column flex-sm-row justify-content-around align-items-center gap-4 position-relative">
             <div class="position-absolute top-50 start-0 translate-middle-y w-100 d-none d-sm-block bg-light border-top border-2 border-outline-variant" style="z-index: 1;"></div>
-            
+
             <div class="d-flex flex-column align-items-center gap-2 bg-white px-3 position-relative z-2">
                 <div class="avatar-mini rounded-circle bg-success text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
                     <span class="material-symbols-outlined fs-5">check</span>
@@ -172,10 +179,10 @@ require_once '../../includes/navbar_consultant.php'; // Injecte la Topbar et la 
 
     <form method="POST" enctype="multipart/form-data">
         <div class="row g-4">
-            
+
             <div class="col-12 col-lg-7">
                 <div class="bento-card bg-white border-0 shadow-sm p-4 h-100">
-                    
+
                     <div class="d-flex align-items-center gap-3 mb-4">
                         <div class="icon-box text-primary bg-light rounded d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                             <span class="material-symbols-outlined fs-5">person</span>
@@ -209,7 +216,12 @@ require_once '../../includes/navbar_consultant.php'; // Injecte la Topbar et la 
 
                     <div class="mb-4">
                         <label class="form-label small fw-semibold text-muted">Numéro Personnel d'Identification (NPI / IFU) *</label>
-                        <input type="text" name="nouveau_npi" class="form-control font-monospace" placeholder="Identifiant unique de l'acheteur" value="<?php echo htmlspecialchars($_POST['nouveau_npi'] ?? ''); ?>" required>
+                        <input type="text" name="nouveau_npi" class="form-control font-monospace border-primary" placeholder="Identifiant unique de l'acheteur" value="<?php echo htmlspecialchars($_POST['nouveau_npi'] ?? ''); ?>" required>
+
+                        <div class="d-flex align-items-start gap-2 mt-2 text-success bg-success bg-opacity-10 p-2 rounded">
+                            <span class="material-symbols-outlined fs-6 mt-0.5">auto_awesome</span>
+                            <small class="fw-medium">Si cet acquéreur est déjà enregistré au cadastre, le système liera automatiquement la nouvelle parcelle à son compte existant grâce à ce numéro NPI.</small>
+                        </div>
                     </div>
 
                     <div class="row g-3">
@@ -228,7 +240,7 @@ require_once '../../includes/navbar_consultant.php'; // Injecte la Topbar et la 
 
             <div class="col-12 col-lg-5">
                 <div class="bento-card bg-white border-0 shadow-sm p-4 h-100 flex-column d-flex justify-content-between">
-                    
+
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-4">
                             <div class="icon-box text-primary bg-light rounded d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
@@ -239,20 +251,20 @@ require_once '../../includes/navbar_consultant.php'; // Injecte la Topbar et la 
                         <p class="text-muted small mb-4">Veuillez fournir une copie numérisée lisible de l'acte de vente signé conjointement par les deux parties.</p>
                     </div>
 
-                    <div class="flex-grow-1 border-2 border-dashed rounded-3 p-4 text-center d-flex flex-column align-items-center justify-content-center bg-light transition-all cursor-pointer group" 
-                         style="min-height: 200px; border-color: var(--md-outline-variant);"
-                         onclick="document.getElementById('document_preuve').click();">
-                        
+                    <div class="flex-grow-1 border-2 border-dashed rounded-3 p-4 text-center d-flex flex-column align-items-center justify-content-center bg-light transition-all cursor-pointer group"
+                        style="min-height: 200px; border-color: var(--md-outline-variant);"
+                        onclick="document.getElementById('document_preuve').click();">
+
                         <div class="avatar-large rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center mb-3 text-primary group-hover:scale-105 transition-transform" style="width: 52px; height: 52px;">
                             <span class="material-symbols-outlined fs-2">cloud_upload</span>
                         </div>
-                        
+
                         <p class="small fw-semibold text-dark mb-1">Glissez-déposez l'acte de vente signé</p>
                         <p class="text-muted mb-3" style="font-size: 0.75rem;">Formats acceptés : PDF, PNG ou JPG (Max 10 Mo)</p>
-                        
+
                         <input type="file" name="document_preuve" id="document_preuve" class="d-none" accept=".pdf,.png,.jpg,.jpeg" onchange="afficherNomFichier(this);">
                         <button type="button" class="btn btn-sm btn-white border px-3 fw-semibold text-muted bg-white">Parcourir les fichiers</button>
-                        
+
                         <div id="file-feedback" class="mt-3 text-success small fw-medium d-none"></div>
                     </div>
 
@@ -277,15 +289,15 @@ require_once '../../includes/navbar_consultant.php'; // Injecte la Topbar et la 
 </div>
 
 <script>
-function afficherNomFichier(input) {
-    const feedback = document.getElementById('file-feedback');
-    if (input.files && input.files[0]) {
-        feedback.innerHTML = `<span class="material-symbols-outlined fs-6 align-middle me-1">attachment</span> Fichier prêt : <b>${input.files[0].name}</b>`;
-        feedback.classList.remove('d-none');
-    } else {
-        feedback.classList.add('d-none');
+    function afficherNomFichier(input) {
+        const feedback = document.getElementById('file-feedback');
+        if (input.files && input.files[0]) {
+            feedback.innerHTML = `<span class="material-symbols-outlined fs-6 align-middle me-1">attachment</span> Fichier prêt : <b>${input.files[0].name}</b>`;
+            feedback.classList.remove('d-none');
+        } else {
+            feedback.classList.add('d-none');
+        }
     }
-}
 </script>
 
 <?php require_once '../../includes/footer.php'; ?>
