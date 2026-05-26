@@ -73,7 +73,7 @@ if ($db_notif) {
     <?php endif; ?>
 
     <nav class="d-flex flex-column gap-2 flex-grow-1 overflow-auto">
-        <a href="/foncier_gloV3/admin/dashboard.php" class="text-decoration-none nav-link-custom <?php echo $est_admin_dashboard ? 'active' : ''; ?>">
+        <a href="/foncier_gloV3/dashboard.php" class="text-decoration-none nav-link-custom <?php echo $est_admin_dashboard ? 'active' : ''; ?>">
             <span class="material-symbols-outlined" <?php echo $est_admin_dashboard ? 'style="font-variation-settings: \'FILL\' 1;"' : ''; ?>>dashboard</span>
             Dashboard
         </a>
