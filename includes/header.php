@@ -16,5 +16,6 @@ if (session_status() === PHP_SESSION_NONE) {
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
     <link href="/foncier_gloV3/assets/css/style.css" rel="stylesheet">
     <link href="/foncier_gloV3/assets/css/dashboard.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/foncier_gloV3/assets/images/favicon.svg">
 </head>
 <body>

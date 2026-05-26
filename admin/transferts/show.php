@@ -16,6 +16,11 @@ $role_user = $_SESSION['user_role'];
 $conn = getConnexion();
 $erreur = '';
 
+// Récupération des accès générés (S'il y a eu validation et création de compte juste avant)
+$pwd_genere   = $_SESSION['pwd_genere'] ?? null;
+$email_genere = $_SESSION['email_genere'] ?? null;
+unset($_SESSION['pwd_genere'], $_SESSION['email_genere']); // On vide la session après l'avoir récupéré
+
 // Récupération des informations du transfert
 $sql = "SELECT t.*, 
                p.reference_cadastrale, p.superficie, p.arrondissement, p.village_quartier, p.type_terrain,
@@ -61,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt_rej->execute();
             $stmt_rej->close();
             flashMessage('danger', 'La demande de mutation a été rejetée.');
-            header('Location: index.php');
+            header('Location: show.php?id=' . $id);
             exit();
         } 
         
@@ -79,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $nouveau_owner_id = $res_check['id'];
                 } else {
                     // Création automatique du compte propriétaire
-                    $chaine = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
+                    $chaine = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ!@#';
                     $pass_clair = substr(str_shuffle($chaine), 0, 8);
                     $pass_hash = password_hash($pass_clair, PASSWORD_DEFAULT);
                     $type_defaut = 'personne_physique';
@@ -91,6 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt_ins->execute();
                     $nouveau_owner_id = $conn->insert_id;
                     $stmt_ins->close();
+
+                    // Stocker temporairement les identifiants générés dans la session
+                    $_SESSION['pwd_genere']   = $pass_clair;
+                    $_SESSION['email_genere'] = $t['nouveau_email'];
                 }
 
                 // Mutation légale de la parcelle
@@ -107,7 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $conn->commit();
                 flashMessage('success', 'Mutation foncière enregistrée. La parcelle a changé de titulaire.');
-                header('Location: index.php');
+                
+                // Redirection sur la même page pour afficher le mot de passe généré
+                header('Location: show.php?id=' . $id);
                 exit();
 
             } catch (Exception $e) {
@@ -134,7 +145,28 @@ require_once '../../includes/navbar_admin.php';
         <h2 class="h3 fw-bold" style="color: var(--md-primary);">Instruction du Dossier : <?php echo htmlspecialchars($t['reference']); ?></h2>
     </div>
 
+    <?php afficherFlash(); ?>
     <?php if(!empty($erreur)): ?><div class="alert alert-danger"><?php echo $erreur; ?></div><?php endif; ?>
+
+    <?php if ($pwd_genere): ?>
+        <div class="alert alert-success border border-success border-opacity-25 shadow-sm p-4 rounded-4 mb-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <span class="material-symbols-outlined fs-1 text-success">account_circle</span>
+                <div>
+                    <h4 class="alert-heading fw-bold mb-1">Nouveau compte Consultant créé !</h4>
+                    <p class="m-0">L'acquéreur ne possédait pas encore de profil. Le système a automatiquement généré ses accès.</p>
+                </div>
+            </div>
+            <hr class="border-success opacity-25">
+            <div class="bg-white p-3 rounded-3 border border-success border-opacity-10 font-monospace">
+                <p class="mb-2"><strong class="text-dark">Email (Identifiant) :</strong> <span class="text-primary"><?php echo htmlspecialchars($email_genere); ?></span></p>
+                <p class="mb-0"><strong class="text-dark">Mot de passe temporaire :</strong> <span class="text-danger fw-bold fs-5"><?php echo htmlspecialchars($pwd_genere); ?></span></p>
+            </div>
+            <div class="mt-3 text-muted small fw-semibold">
+                <span class="material-symbols-outlined fs-6 align-middle">info</span> Veuillez transmettre ces identifiants au nouveau propriétaire avec son attestation.
+            </div>
+        </div>
+    <?php endif; ?>
 
     <div class="row g-4">
         
