@@ -33,7 +33,6 @@ if ($db_notif) {
                        FROM transferts WHERE statut = 'en_verification'
                        ORDER BY created_at DESC LIMIT 4";
     } elseif ($role_user === 'agent_sade') {
-        // L'Agent est notifié des nouvelles demandes citoyennes et des alertes
         $sql_notifs = "SELECT 'alerte' AS nature, code AS ref, message AS txt, niveau AS info, created_at 
                        FROM alertes WHERE statut = 'nouvelle'
                        UNION ALL
