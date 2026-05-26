@@ -37,7 +37,7 @@ function redirigerSelonRole() {
         case 'administrateur':
         case 'agent_sade':
         case 'chef_service':
-            header('Location: /foncier_gloV3/admin/dashboard.php');
+            header('Location: /foncier_gloV3/dashboard.php');
             break;
         case 'consultant':
             header('Location: /foncier_gloV3/consultant/dashboard.php');

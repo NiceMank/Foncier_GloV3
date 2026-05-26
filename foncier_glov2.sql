@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 25 mai 2026 à 12:59
+-- Généré le : lun. 25 mai 2026 à 23:54
 -- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.0.30
+-- Version de PHP : 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -83,6 +83,13 @@ CREATE TABLE `parcelles` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `parcelles`
+--
+
+INSERT INTO `parcelles` (`id`, `reference_cadastrale`, `superficie`, `latitude`, `longitude`, `arrondissement`, `village_quartier`, `statut`, `type_terrain`, `description`, `document_titre`, `proprietaire_id`, `agent_id`, `created_at`, `updated_at`) VALUES
+(1, 'GLO/24/001', 1300.00, 6.5403900, 2.3256400, 'Glo-Gbigbe', 'Zoungodo', '', 'agricole', 'Cool', NULL, 1, 1, '2026-05-25 19:57:13', '2026-05-25 19:57:13');
+
 -- --------------------------------------------------------
 
 --
@@ -111,7 +118,8 @@ CREATE TABLE `proprietaires` (
 --
 
 INSERT INTO `proprietaires` (`id`, `nom`, `prenom`, `npi`, `telephone`, `email`, `adresse`, `type`, `piece_identite`, `email_connexion`, `password_connexion`, `compte_actif`, `created_at`, `updated_at`) VALUES
-(1, 'AGOSSA', 'jean', '123456789', '97000000', 'jean@gmail.com', 'qartier zoungoudo glo-djigbe', 'personne_physique', 'CNI-123456', NULL, NULL, 'non', '2026-05-16 08:36:46', '2026-05-16 08:36:46');
+(1, 'AGOSSA', 'jean', '123456789', '97000000', 'jean@gmail.com', 'qartier zoungoudo glo-djigbe', 'personne_physique', 'CNI-123456', NULL, NULL, 'non', '2026-05-16 08:36:46', '2026-05-16 08:36:46'),
+(2, 'Dupond', 'Jean', '2047090746', '0146049433', NULL, '', 'personne_physique', NULL, 'farelahdk@gmail.com', '$2y$10$O027Qq5ZI.u2j4Nh5eOj4.11C/HKPR5KMFiH2P7.EGngeeOdIGw4u', 'oui', '2026-05-25 21:16:57', '2026-05-25 21:16:57');
 
 -- --------------------------------------------------------
 
@@ -157,15 +165,16 @@ CREATE TABLE `users` (
   `statut` enum('actif','inactif') NOT NULL DEFAULT 'actif',
   `derniere_connexion` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `actif` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `nom`, `prenom`, `matricule`, `email`, `telephone`, `password`, `role`, `statut`, `derniere_connexion`, `created_at`, `updated_at`) VALUES
-(1, 'ADMIN', 'Super', 'ADM001', 'admin@mairie-glo.bj', '97000000', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'administrateur', 'actif', '2026-05-25 09:32:15', '2026-05-11 10:10:34', '2026-05-25 09:32:15');
+INSERT INTO `users` (`id`, `nom`, `prenom`, `matricule`, `email`, `telephone`, `password`, `role`, `statut`, `derniere_connexion`, `created_at`, `updated_at`, `actif`) VALUES
+(1, 'ADMIN', 'Super', 'ADM001', 'admin@mairie-glo.bj', '97000000', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'administrateur', 'actif', '2026-05-25 21:52:50', '2026-05-11 10:10:34', '2026-05-25 21:52:50', 1);
 
 --
 -- Index pour les tables déchargées
@@ -244,13 +253,13 @@ ALTER TABLE `litiges`
 -- AUTO_INCREMENT pour la table `parcelles`
 --
 ALTER TABLE `parcelles`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `proprietaires`
 --
 ALTER TABLE `proprietaires`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `transferts`

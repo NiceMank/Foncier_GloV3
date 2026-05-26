@@ -2,9 +2,13 @@
 require_once 'config/database.php';
 require_once 'config/session.php';
 
-// Redirection si l'utilisateur est déjà connecté
-if (estConnecte()) {
-    header('Location: /foncier_gloV3/dashboard.php');
+// Redirection si l'utilisateur est déjà connecté selon son rôle
+if (isset($_SESSION['user_role'])) {
+    if ($_SESSION['user_role'] === 'consultant') {
+        header('Location: /foncier_gloV3/consultant/dashboard.php');
+    } else {
+        header('Location: /foncier_gloV3/dashboard.php');
+    }
     exit();
 }
 
@@ -12,8 +16,8 @@ $erreur = '';
 $email  = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Utilisation de la fonction globale de nettoyage
-    $email    = nettoyer($_POST['email']);
+    // Nettoyage (assurez-vous que la fonction nettoyer() est bien dans session.php)
+    $email    = trim(htmlspecialchars($_POST['email']));
     $password = trim($_POST['password']);
 
     if (empty($email) || empty($password)) {
@@ -21,40 +25,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $conn = getConnexion();
 
-        // Récupération de l'utilisateur actif
-        $sql  = "SELECT * FROM users WHERE email = ? AND statut = 'actif' LIMIT 1";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $user   = $result->fetch_assoc();
+        // 1ère Étape : Vérifier si c'est un employé (Admin, Agent, Chef) dans la table `users`
+        $sql_user  = "SELECT * FROM users WHERE email = ? AND statut = 'actif' LIMIT 1";
+        $stmt_user = $conn->prepare($sql_user);
+        $stmt_user->bind_param('s', $email);
+        $stmt_user->execute();
+        $result_user = $stmt_user->get_result();
+        $user = $result_user->fetch_assoc();
 
-        // Vérification du mot de passe crypté
         if ($user && password_verify($password, $user['password'])) {
-            
+            // C'est un employé du Staff
             $_SESSION['user_id']     = $user['id'];
             $_SESSION['user_nom']    = $user['nom'];
             $_SESSION['user_prenom'] = $user['prenom'];
             $_SESSION['user_email']  = $user['email'];
-            $_SESSION['user_role']   = $user['role'];
+            $_SESSION['user_role']   = $user['role']; // 'admin', 'agent' ou 'chef'
 
-            // Enregistrement du timestamp de connexion
-            $sql2  = "UPDATE users SET derniere_connexion = NOW() WHERE id = ?";
-            $stmt2 = $conn->prepare($sql2);
-            $stmt2->bind_param('i', $user['id']);
-            $stmt2->execute();
-            $stmt2->close();
-
-            $stmt->close();
-            $conn->close();
+            // Mise à jour de la dernière connexion
+            $sql_update = "UPDATE users SET derniere_connexion = NOW() WHERE id = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param('i', $user['id']);
+            $stmt_update->execute();
+            $stmt_update->close();
 
             header('Location: /foncier_gloV3/dashboard.php');
             exit();
-        } else {
-            $erreur = 'Email ou mot de passe incorrect.';
-        }
 
-        $stmt->close();
+        } else {
+            // 2ème Étape : Si ce n'est pas un employé, on vérifie si c'est un Consultant (Propriétaire)
+            $sql_prop = "SELECT * FROM proprietaires WHERE email_connexion = ? AND compte_actif = 'oui' LIMIT 1";
+            $stmt_prop = $conn->prepare($sql_prop);
+            $stmt_prop->bind_param('s', $email);
+            $stmt_prop->execute();
+            $result_prop = $stmt_prop->get_result();
+            $prop = $result_prop->fetch_assoc();
+
+            if ($prop && password_verify($password, $prop['password_connexion'])) {
+                // C'est un Consultant
+                $_SESSION['user_id']     = $prop['id'];
+                $_SESSION['user_nom']    = $prop['nom'];
+                $_SESSION['user_prenom'] = $prop['prenom'];
+                $_SESSION['user_email']  = $prop['email_connexion'];
+                $_SESSION['user_role']   = 'consultant'; // On force le rôle à 'consultant'
+
+                header('Location: /foncier_gloV3/consultant/dashboard.php');
+                exit();
+            } else {
+                $erreur = 'Email ou mot de passe incorrect, ou compte inactif.';
+            }
+            $stmt_prop->close();
+        }
+        $stmt_user->close();
         $conn->close();
     }
 }
@@ -226,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                class="form-control" 
                                id="emailInput" 
                                placeholder="nom@exemple.com"
-                               value="<?php echo htmlspecialchars($email); ?>" 
+                               value="<?php echo htmlspecialchars($email ?? ''); ?>" 
                                required autofocus>
                         <label for="emailInput" class="text-muted">Adresse Email</label>
                     </div>

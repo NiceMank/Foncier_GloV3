@@ -1,24 +1,50 @@
 /* --- Variables de Thème (Material Design 3) --- */
 :root {
+    /* Écosystème Principal (Bleu Marine Institutionnel) */
     --md-primary: #00375e;
     --md-primary-container: #1f4e79;
     --md-on-primary-container: #95bff1;
+    --md-primary-fixed-dim: #a0cafc;
+    --md-on-primary-fixed: #001d35;
+    --md-on-primary-fixed-variant: #184974;
+
+    /* Écosystème Secondaire (Bleu Cadastre) */
     --md-secondary: #0b61a1;
     --md-secondary-container: #7cbaff;
     --md-on-secondary-container: #004a7d;
-    --md-surface: #f8f9ff;
-    --md-surface-container-low: #eff4ff;
+    --md-secondary-fixed: #d1e4ff;
+    --md-secondary-fixed-dim: #9ecaff;
+    --md-on-secondary-fixed-variant: #00497c;
+
+    /* Écosystème Tertiaire (Espace Citoyen / Consultant) */
+    --md-tertiary: #41009d;
+    --md-tertiary-container: #5a20c3;
+    --md-on-tertiary-container: #c7b0ff;
+    --md-tertiary-fixed: #e9ddff;
+    --md-tertiary-fixed-dim: #d0bcff;
+
+    /* Structure, Canvas & Surfaces Bento */
+    --md-background: #f8fafc;
+    --md-surface: #ffffff;
+    --md-surface-bright: #f8f9ff;
+    --md-surface-dim: #cbdbf5;
     --md-surface-container: #e5eeff;
-    --md-on-surface: #0b1c30;
-    --md-on-surface-variant: #42474f;
+    --md-surface-container-low: #eff4ff;
+    --md-surface-container-lowest: #ffffff;
+    --md-surface-container-high: #dce9ff;
+    --md-surface-container-highest: #d3e4fe;
+
+    /* Tracés, Bordures & Séparateurs */
+    --md-outline: #72777f;
     --md-outline-variant: #c2c7d0;
+
+    /* Système d'Alertes, Erreurs & Verrous */
+    --md-error: #ba1a1a;
     --md-error-container: #ffdad6;
     --md-on-error-container: #93000a;
-    --md-tertiary-container: #e9ddff;
-    --md-on-tertiary-container: #41009d;
     
     --sidebar-width: 260px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
@@ -27,7 +53,7 @@ body {
     overflow-x: hidden;
 }
 
-/* --- Layout Principal --- */
+/* --- Layout Principal (Sidebar & Main) --- */
 .sidebar-wrapper {
     width: var(--sidebar-width);
     height: 100vh;
@@ -73,13 +99,17 @@ body {
     color: var(--md-on-surface-variant);
 }
 
-/* --- Menu Latéral --- */
+/* --- Menu Latéral (Navigation) --- */
 .nav-link-custom {
     color: var(--md-on-surface-variant);
     border-radius: 8px;
     padding: 0.6rem 1rem;
     font-weight: 500;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
 }
 
 .nav-link-custom:hover {
@@ -93,12 +123,12 @@ body {
     font-weight: 700;
 }
 
-/* --- Composants de Contenu --- */
-.hero-banner {
+/* --- Composants du Tableau de Bord (Bannières & Cartes) --- */
+.dashboard-hero {
     background: linear-gradient(135deg, var(--md-primary), var(--md-secondary));
     color: white;
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    padding: 2rem;
     position: relative;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(11, 97, 161, 0.15);
@@ -107,7 +137,7 @@ body {
 .bento-card {
     background-color: #ffffff;
     border: 1px solid var(--md-outline-variant);
-    border-radius: 16px;
+    border-radius: 12px;
     padding: 1.5rem;
     transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
@@ -118,18 +148,29 @@ body {
 }
 
 .icon-box {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* --- Tableaux --- */
+.icon-box .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0.5rem;
+}
+
+/* --- Tableaux de données --- */
 .table-card {
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: 12px;
     border: 1px solid var(--md-outline-variant);
     overflow: hidden;
 }
@@ -140,40 +181,12 @@ body {
     font-weight: 600;
     border-bottom: 1px solid var(--md-outline-variant);
     padding: 1rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
 }
 
 .table-custom tbody td {
     padding: 1rem;
     vertical-align: middle;
     border-bottom: 1px solid var(--md-outline-variant);
-}
-
-/* --- Personnalisation de la Barre de Navigation Globale --- */
-.custom-navbar {
-    background-color: var(--primary) !important;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-}
-
-.custom-navbar .nav-link {
-    color: rgba(255, 255, 255, 0.8) !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-.custom-navbar .nav-link:hover {
-    color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.08);
-}
-
-.custom-navbar .nav-link.active {
-    color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.15);
-}
-
-.custom-navbar .dropdown-menu {
-    border-radius: var(--radius-md);
-    margin-top: 0.5rem;
 }
