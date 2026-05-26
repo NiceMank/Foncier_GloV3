@@ -119,10 +119,6 @@ Le projet supporte plusieurs rôles métier :
 - `login.php` traite l’authentification du staff via `users` et des consultants via `proprietaires`.
 - La structure SQL inclut des tables pour `parcelles`, `proprietaires`, `transferts`, `litiges`, `alertes`, et `users`.
 
-## Vérification IA
-
-Aucune mention explicite d'IA ou de commentaire généré par un assistant n'a été trouvée dans le code source du projet.
-
 ## Utilisation
 
 1. Se connecter via `login.php`.
